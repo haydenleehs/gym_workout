@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SG Gym Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">🇸🇬 Singapore gym workout planner</p>
+      <h1>Your gym. Your body. <span class="accent-text">Your workout.</span></h1>
+      <p class="lede">Pick your gym, choose what you want to train, tell us a bit about yourself — we'll recommend the machines and exercises that suit you.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- STEP 1: GYM -->
+    <section class="step" id="step-gym">
+      <div class="step-head">
+        <span class="step-num">1</span>
+        <div>
+          <h2>Choose your gym</h2>
+          <p class="muted">Equipment is based on what each chain typically has.</p>
+        </div>
+      </div>
+      <div class="gym-grid" id="gymGrid"></div>
+
+      <details class="equip-panel" id="equipPanel" hidden>
+        <summary>
+          <span>Check your outlet's equipment</span>
+          <span class="muted small" id="equipCount"></span>
+        </summary>
+        <p class="gym-tip" id="gymTip"></p>
+        <div class="gym-found" id="gymFound"></div>
+        <p class="muted small">Untick anything your outlet doesn't have:</p>
+        <div class="equip-grid" id="equipGrid"></div>
+      </details>
+    </section>
+
+    <!-- STEP 2: TARGET -->
+    <section class="step" id="step-target">
+      <div class="step-head">
+        <span class="step-num">2</span>
+        <div>
+          <h2>What do you want to train?</h2>
+          <p class="muted">Pick one focus for today's session.</p>
+        </div>
+      </div>
+      <div class="chip-grid" id="targetGrid"></div>
+    </section>
+
+    <!-- STEP 3: PROFILE -->
+    <section class="step" id="step-profile">
+      <div class="step-head">
+        <span class="step-num">3</span>
+        <div>
+          <h2>About you</h2>
+          <p class="muted">Used to pick safe, suitable exercises and set your sets &amp; reps.</p>
+        </div>
+      </div>
+
+      <form id="profileForm" class="profile-form" novalidate>
+        <div class="field">
+          <label for="height">Height (cm)</label>
+          <input type="number" id="height" min="120" max="230" placeholder="170" required />
+        </div>
+        <div class="field">
+          <label for="weight">Weight (kg)</label>
+          <input type="number" id="weight" min="30" max="250" step="0.1" placeholder="65" required />
+        </div>
+        <div class="field">
+          <label for="age">Age</label>
+          <input type="number" id="age" min="13" max="90" placeholder="25" required />
+        </div>
+        <div class="field">
+          <label for="sex">Sex</label>
+          <select id="sex">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="activity">How active are you day-to-day?</label>
+          <select id="activity">
+            <option value="sedentary">Sedentary — desk job, little exercise</option>
+            <option value="light" selected>Lightly active — exercise 1–2×/week</option>
+            <option value="moderate">Moderately active — exercise 3–4×/week</option>
+            <option value="very">Very active — exercise 5+×/week / physical job</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="experience">Gym experience</label>
+          <select id="experience">
+            <option value="beginner">Beginner — under 6 months</option>
+            <option value="intermediate">Intermediate — 6 months to 2 years</option>
+            <option value="advanced">Advanced — 2+ years, confident with barbells</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="goal">Main goal</label>
+          <select id="goal">
+            <option value="general">General fitness &amp; health</option>
+            <option value="fatloss">Lose fat</option>
+            <option value="muscle">Build muscle</option>
+            <option value="strength">Get stronger</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="duration">Session length</label>
+          <select id="duration">
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60" selected>60 min</option>
+            <option value="75">75 min</option>
+            <option value="90">90 min</option>
+          </select>
+        </div>
+
+        <fieldset class="field full prefs">
+          <legend>What do you prefer to train with? <span class="muted">(optional, pick any)</span></legend>
+          <div class="pref-grid" id="prefGrid"></div>
+        </fieldset>
+
+        <fieldset class="field full joints">
+          <legend>Any joints to go easy on?</legend>
+          <label class="check"><input type="checkbox" name="joint" value="knee" /> Knees</label>
+          <label class="check"><input type="checkbox" name="joint" value="back" /> Lower back</label>
+          <label class="check"><input type="checkbox" name="joint" value="shoulder" /> Shoulders</label>
+        </fieldset>
+
+        <p class="form-error full" id="formError" role="alert"></p>
+        <button type="submit" class="btn-primary full" id="generateBtn">Build my workout →</button>
+      </form>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="results" id="results" hidden>
+      <div class="results-head">
+        <div>
+          <p class="eyebrow" id="resultsEyebrow"></p>
+          <h2 id="resultsTitle"></h2>
+        </div>
+        <div class="results-actions">
+          <button type="button" class="btn-ghost" id="shuffleBtn">↻ Shuffle</button>
+          <button type="button" class="btn-ghost" id="copyBtn">Copy plan</button>
+        </div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+      <div class="why" id="why"></div>
+      <p class="hidden-bar" id="hiddenBar" hidden></p>
+      <div class="block" id="warmup"></div>
+      <ol class="exercise-list" id="exerciseList"></ol>
+      <div class="block" id="finisher"></div>
+      <div class="block sg-tips" id="tips"></div>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p class="muted small">General guidance only — not medical advice. If you have an injury or health condition, check with a doctor or physiotherapist first. Equipment varies by outlet.</p>
+    <details class="credits muted small">
+      <summary>Photo credits</summary>
+      <p>Equipment photos from Wikimedia Commons, used under their free licences. Equipment without a photo uses our own drawings.</p>
+      <ul id="credits"></ul>
+    </details>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Equipment photo">
+    <div class="lb-stage" id="lbStage"></div>
+    <div class="lb-bar">
+      <p class="lb-caption" id="lbCaption"></p>
+      <div class="lb-actions">
+        <button type="button" class="btn-ghost" id="lbOut" aria-label="Zoom out">−</button>
+        <button type="button" class="btn-ghost" id="lbIn" aria-label="Zoom in">+</button>
+        <button type="button" class="btn-ghost" id="lbClose">Close ✕</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="js/data.js"></script>
+  <script src="js/photos.js"></script>
+  <script src="js/illustrations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
